@@ -20,18 +20,27 @@ console.log(url);
 
 let req = new Request(url);
 let res = await req.loadString();
-let titleText = res.match(/\<title\>(.*?)\<\/title\>/)[1];
-
-
+let titleText = res.match(/\<title\>(.*?)\<\/title\>/)[1];    
 let price = titleText.replace(`Petrol Price in ${place}, Petrol Rate Today`, '').replace(' - Goodreturns','').match(/Rs.(.*?)\/Ltr/)[1].trim();
 console.log(price);
+fuelDetailsBlock = res.match(/\<div class="fuel-block-details"\>(.*?)\<\/div>/s)[1];
+fuelChangeBlock = fuelDetailsBlock.match(/\<span class="(.*?)"\>(.*?)\<i class="/s)[2];        
+console.log(fuelChangeBlock);
+// Extract the number using a regular expression
+const found = fuelChangeBlock.match(/(\d+\.\d+)/);
 
-let nochange = `${res.match(/\<div class="fuel-block-details"\>(.*?)\<\/div/s)[1].includes('<span class="nochange">') ? "NC" : }`;
-
-console.log(nochange);
-let color = `${change.includes('-') ? '#00FF00' : change.match("NC") ? '#800080' : '#FF0000'}`;
-let prefix = `${change.includes('-') ? '' : change.match("NC") ? '±' : '+'}`;
+if (found) {
+    const change = parseFloat(found[1]);            
+    console.log(`Change details: ${change}`); // Example: 0.20
+} else {
+    console.log('Change details: NaN');
+}
+fuelChangeIndicator = fuelDetailsBlock.match(/\<span class="(.*?)"\>(.*?)\<i class="/s)[1];        
+console.log(fuelChangeIndicator);
+let color = `${fuelChangeIndicator.includes("fuel-rate-down") ? '#00FF00' : fuelChangeIndicator.includes("fuel-rate-nochange") ? '#800080' : fuelChangeIndicator.includes("fuel-rate-up") ? '#FF0000' : 'None'}`;
 console.log(color);
+let prefix = `${fuelChangeIndicator.includes("fuel-rate-down") ? '-' : fuelChangeIndicator.includes("fuel-rate-nochange") ? '±' : fuelChangeIndicator.includes("fuel-rate-up") ? '+' : 'None'}`;
+console.log(prefix);
 
 
 let w = new ListWidget();
