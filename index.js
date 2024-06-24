@@ -1,3 +1,6 @@
+// Variables used by Scriptable.
+// These must be at the very top of the file. Do not edit.
+// icon-color: deep-blue; icon-glyph: gas-pump;
 "use strict";
 
 /**
@@ -6,11 +9,11 @@
   */
  Script.name("petrol-price-india");
  
-// 
-const place = args.widgetParameter.trim();
+// const place = args.widgetParameter.trim();
 
+ 
 // 
-// const place = "pudukkottai";
+const place = "pudukkottai";
 
 const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
 
@@ -23,19 +26,22 @@ let res = await req.loadString();
 let titleText = res.match(/\<title\>(.*?)\<\/title\>/)[1];    
 let price = titleText.replace(`Petrol Price in ${place}, Petrol Rate Today`, '').replace(' - Goodreturns','').match(/Rs.(.*?)\/Ltr/)[1].trim();
 console.log(price);
-fuelDetailsBlock = res.match(/\<div class="fuel-block-details"\>(.*?)\<\/div>/s)[1];
-fuelChangeBlock = fuelDetailsBlock.match(/\<span class="(.*?)"\>(.*?)\<i class="/s)[2];        
+let fuelDetailsBlock = res.match(/\<div class="fuel-block-details"\>(.*?)\<\/div>/s)[1];
+console.log("test");
+console.log(fuelDetailsBlock);
+let fuelChangeBlock = fuelDetailsBlock.match(/\<span class="(.*?)"\>(.*?)\<i class="/s)[2];        
 console.log(fuelChangeBlock);
 // Extract the number using a regular expression
 const found = fuelChangeBlock.match(/(\d+\.\d+)/);
 
+let change;
 if (found) {
-    const change = parseFloat(found[1]);            
+    change = parseFloat(found[1]);            
     console.log(`Change details: ${change}`); // Example: 0.20
 } else {
     console.log('Change details: NaN');
 }
-fuelChangeIndicator = fuelDetailsBlock.match(/\<span class="(.*?)"\>(.*?)\<i class="/s)[1];        
+let fuelChangeIndicator = fuelDetailsBlock.match(/\<span class="(.*?)"\>(.*?)\<i class="/s)[1];        
 console.log(fuelChangeIndicator);
 let color = `${fuelChangeIndicator.includes("fuel-rate-down") ? '#00FF00' : fuelChangeIndicator.includes("fuel-rate-nochange") ? '#800080' : fuelChangeIndicator.includes("fuel-rate-up") ? '#FF0000' : 'None'}`;
 console.log(color);
@@ -80,18 +86,18 @@ row2.addSpacer();
 
 
 const df = new DateFormatter();
-df.useMediumDateStyle();
+var today = new Date();
+df.useShortDateStyle();
 let updateDate = titleText.match(/Petrol Rate Today \((.*?)\)/s)[1];
-console.log(df.date(updateDate));
-let date = row2.addDate(df.date(updateDate));
+updateDate = updateDate.replace("th", "");
+let pDate = new Date(Date.parse(updateDate));
+
+console.log(df.string(pDate));
+let date = row2.addDate(pDate);
 date.font = Font.systemFont(10);
 date.applyDateStyle();
-
-
 
 Script.setWidget(w);
 Script.complete();
 w.presentMedium();
-
-
 
