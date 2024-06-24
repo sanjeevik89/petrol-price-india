@@ -9,11 +9,11 @@
   */
  Script.name("petrol-price-india");
  
-// const place = args.widgetParameter.trim();
+// 
+const place = args.widgetParameter.trim();
 
  
-// 
-const place = "pudukkottai";
+// const place = "pudukkottai";
 
 const capitalize = s => s && s[0].toUpperCase() + s.slice(1)
 
@@ -65,10 +65,6 @@ mainCol.addSpacer();
 let row2 = mainCol.addStack();
 row2.layoutHorizontally(); 
 
-
-
-
-
 let text = row1.addText("₹"+price);
 text.font = Font.systemFont(20);
 
@@ -78,20 +74,16 @@ let subtext = row1.addText(prefix + change);
 subtext.font = Font.systemFont(15);
 subtext.textColor = new Color(color);
 
-
 let loc = row2.addText(capitalize(place));
 loc.font = Font.footnote();
 
 row2.addSpacer();
 
-
 const df = new DateFormatter();
-var today = new Date();
 df.useShortDateStyle();
 let updateDate = titleText.match(/Petrol Rate Today \((.*?)\)/s)[1];
 updateDate = updateDate.replace("th", "");
 let pDate = new Date(Date.parse(updateDate));
-
 console.log(df.string(pDate));
 let date = row2.addDate(pDate);
 date.font = Font.systemFont(10);
